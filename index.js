@@ -9,6 +9,7 @@ const isReachable = require('is-reachable');
  * poll the node state
  * control nodes / scene
  */
+
 module.exports = Zwave = {};
 
 Zwave.createConnection = function (setting, callback) {
@@ -52,11 +53,3 @@ let myGateway = new zwave.createConnection({
 }, function (err) {
 	console.log(err);
 });
-
-
-
-myGateway.poll({node: 1}, function (err, result) {
-
-});
-
-
