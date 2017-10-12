@@ -48,11 +48,19 @@ Zwave.prototype.pollNode = function (node, callback) {
 Zwave.prototype.pollAllNodeDetail = function (callback) {
 	let cmd = 'curl --digest -u ' + this.setting.acc + ':' + this.setting.pwd + ' ' + this.setting.ip + ':5000/node_detail.cgi -d "fun=load"';
 
-	console.log(cmd);
-
 	child_process.exec(cmd, function (err, stdout) {
 		let json = parser(stdout, {object: true});
 		callback(err, json.node_detail);
+	});
+}
+
+Zwave.prototype.pollScene = function (callback) {
+	let cmd = 'curl --digest -u ' + this.setting.acc + ':' + this.setting.pwd + ' ' + this.setting.ip + ':5000/scenepost.html -d "fun=load"';;
+
+	child_process.exec(cmd, function (err, stdout) {
+		let json = parser(stdout, {object: true});
+		let count = json.scenes.sceneid.shift();
+		callback(err, json.scenes.sceneid);
 	});
 }
 
@@ -62,6 +70,15 @@ Zwave.prototype.control = function (value, callback) {
 
 	child_process.exec(cmd, function (err, stdout) {
 		console.log(stdout);
+		callback(err);
+	});
+}
+
+Zwave.prototype.excuteScene = function (id, callback) {
+	let cmd = 'curl --digest -u ' + this.setting.acc + ':' + this.setting.pwd + ' ' + this.setting.ip + ':5000/scenepost.html -d "' + 'fun=execute&id=' + id + '"';
+
+	child_process.exec(cmd, function (err, stdout) {
+		// console.log(stdout);
 		callback(err);
 	});
 }
